@@ -22,6 +22,25 @@
             },
             deleteItem: function(index) {
                 this.todos.splice(index, 1);
+            },
+            purge: function() {
+                this.todos = this.remaining;
+            }
+        },
+        computed: {
+            remaining: function() {
+                var items = this.todos.filter(function(todo) {
+                    return !todo.isDone;
+                });
+                return items;
+            }
+        },
+        watch: {
+            todos: {
+              handler: function() {
+                localStorage.setItem('todos', JSON.stringify(this.todos));
+              },
+              deep: true
             }
         }
     });
