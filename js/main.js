@@ -5,11 +5,7 @@
         el: '#app',
         data: {
             newItem: '',
-            todos: [
-                {title: 'task1', isDone: false},
-                {title: 'task2', isDone: false},
-                {title: 'task3', isDone: true},
-            ]
+            todos: []
         },
         methods: {
             addItem: function() {
@@ -27,6 +23,14 @@
                 this.todos = this.remaining;
             }
         },
+        watch: {
+            todos: {
+              handler: function() {
+                localStorage.setItem('todos', JSON.stringify(this.todos));
+              },
+              deep: true
+            }
+        },
         computed: {
             remaining: function() {
                 var items = this.todos.filter(function(todo) {
@@ -35,13 +39,8 @@
                 return items;
             }
         },
-        watch: {
-            todos: {
-              handler: function() {
-                localStorage.setItem('todos', JSON.stringify(this.todos));
-              },
-              deep: true
-            }
+        mounted: function() {
+            this.todos = JSON.parse(localStorage.getItem('todos')) || [];
         }
     });
 })();
